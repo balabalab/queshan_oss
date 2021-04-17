@@ -1,46 +1,23 @@
-# Aliyun-oss-storage for Laravel 5+
-Aliyun oss filesystem storage adapter for laravel 5. You can use Aliyun OSS just like laravel Storage as usual.    
-借鉴了一些优秀的代码，综合各方，同时做了更多优化，将会添加更多完善的接口和插件，打造Laravel最好的OSS Storage扩展
-## Inspired By
-- [thephpleague/flysystem-aws-s3-v2](https://github.com/thephpleague/flysystem-aws-s3-v2)
-- [apollopy/flysystem-aliyun-oss](https://github.com/apollopy/flysystem-aliyun-oss) 
-
-## Require
-- Laravel 5+
-- cURL extension
-
-##Installation
-In order to install AliOSS-storage, just add
-
-    "jacobcyl/ali-oss-storage": "^2.1"
-
-to your composer.json. Then run `composer install` or `composer update`.  
-Or you can simply run below command to install:
-
-    "composer require jacobcyl/ali-oss-storage:^2.0"
-    
-Then in your `config/app.php` add this line to providers array:
-```php
-Jacobcyl\AliOSS\AliOssServiceProvider::class,
-```
+# Aliyun-oss-storage 
+原包  jacobcyl/ali-oss-storage 不再维护。修改部分代码符合当前业务。不适合当做成熟插件。
 ## Configuration
 Add the following in app/filesystems.php:
 ```php
+[
 'disks'=>[
-    ...
     'oss' => [
             'driver'        => 'oss',
             'access_id'     => '<Your Aliyun OSS AccessKeyId>',
             'access_key'    => '<Your Aliyun OSS AccessKeySecret>',
             'bucket'        => '<OSS bucket name>',
-            'endpoint'      => '<the endpoint of OSS, E.g: oss-cn-hangzhou.aliyuncs.com | custom domain, E.g:img.abc.com>', // OSS 外网节点或自定义外部域名
-            //'endpoint_internal' => '<internal endpoint [OSS内网节点] 如：oss-cn-shenzhen-internal.aliyuncs.com>', // v2.0.4 新增配置属性，如果为空，则默认使用 endpoint 配置(由于内网上传有点小问题未解决，请大家暂时不要使用内网节点上传，正在与阿里技术沟通中)
-            'cdnDomain'     => '<CDN domain, cdn域名>', // 如果isCName为true, getUrl会判断cdnDomain是否设定来决定返回的url，如果cdnDomain未设置，则使用endpoint来生成url，否则使用cdn
-            'ssl'           => <true|false> // true to use 'https://' and false to use 'http://'. default is false,
-            'isCName'       => <true|false> // 是否使用自定义域名,true: 则Storage.url()会使用自定义的cdn或域名生成文件url， false: 则使用外部节点生成url
-            'debug'         => <true|false>
-    ],
-    ...
+            'endpoint'      => '<the endpoint of OSS, E.g: oss-cn-hangzhou.aliyuncs.com | custom domain, E.g:img.abc.com>', // OSS 外网节点或自定义外部域名
+      //'endpoint_internal' => '<internal endpoint [OSS内网节点] 如：oss-cn-shenzhen-internal.aliyuncs.com>', // v2.0.4 新增配置属性，如果为空，则默认使用 endpoint 配置(由于内网上传有点小问题未解决，请大家暂时不要使用内网节点上传，正在与阿里技术沟通中)
+            'cdnDomain'     => '<CDN domain, cdn域名>', // 如果isCName为true, getUrl会判断cdnDomain是否设定来决定返回的url，如果cdnDomain未设置，则使用endpoint来生成url，否则使用cdn
+            'ssl'           => <true|false> // true to use 'https://' and false to use 'http://'. default is false,
+            'isCName'       => <true|false> // 这里修改原参数逻辑，所有的文件上传都使用节点上传，根据cdnDomain是否设置来设置访问文件前缀。
+            'debug'         => <true|false>
+            'isPrivate'     => <true|false> //为true则在使用Storage::disk('oss')->url($path)时，会请求一个临时的图片地址(即为文件生成一个带访问权限和生存时间的临时地址)。
+    ]
 ]
 ```
 Then set the default driver in app/filesystems.php:
