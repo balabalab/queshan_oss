@@ -47,6 +47,7 @@ class AliOssServiceProvider extends ServiceProvider
             if($debug) Log::debug('OSS config:', $config);
             //域名没有绑定bucket,但是有需要cdn,暂时这么修改，待完善。
             $client  = new OssClient($accessId, $accessKey, $endPoint, false);
+            $client->setUseSSL($ssl);
 //            $client  = new OssClient($accessId, $accessKey, $epInternal, $isCname);
             $adapter = new AliOssAdapter($client, $bucket, $endPoint, $ssl, $isCname, $isPrivate, $debug, $cdnDomain);
 
