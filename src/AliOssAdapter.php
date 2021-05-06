@@ -581,7 +581,7 @@ class AliOssAdapter extends AbstractAdapter
     //获取临时域名
     public function getTempPath($path)
     {
-        return ( $this->ssl ? 'https://' : 'http://' ) . $this->client->signUrl($this->bucket, $path, 180);
+        return $this->client->signUrl($this->bucket, $path, 180);
     }
 
     /**
